@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laoxu Minecraft Launcher</title>
-    <!-- 使用简洁字体，去掉过于花哨的样式 -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -19,6 +18,7 @@
             background: #0a0c12;
             color: #eef2ff;
             line-height: 1.5;
+            overflow-x: hidden;
         }
 
         .container {
@@ -27,7 +27,7 @@
             padding: 2rem 1.5rem;
         }
 
-        /* 导航栏 - 简洁玻璃效果 */
+        /* 导航栏 */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -68,7 +68,7 @@
             color: #60a5fa;
         }
 
-        /* 头部简介区 */
+        /* 头部 */
         .hero {
             background: linear-gradient(135deg, #1e293b, #0f172a);
             border-radius: 2rem;
@@ -96,19 +96,6 @@
             margin-bottom: 1rem;
         }
 
-        /* 卡片通用样式 */
-        .card {
-            background: #1e293b;
-            border-radius: 1.5rem;
-            padding: 1.5rem;
-            border: 1px solid #334155;
-            transition: 0.2s;
-        }
-        .card:hover {
-            border-color: #3b82f6;
-            transform: translateY(-2px);
-        }
-
         /* 功能网格 */
         .features-grid {
             display: grid;
@@ -120,6 +107,10 @@
             display: flex;
             gap: 1rem;
             align-items: flex-start;
+            background: #1e293b;
+            padding: 1.2rem;
+            border-radius: 1.2rem;
+            border: 1px solid #334155;
         }
         .feature-item i {
             font-size: 1.5rem;
@@ -127,15 +118,15 @@
             margin-top: 0.2rem;
         }
         .feature-item h3 {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin-bottom: 0.3rem;
         }
         .feature-item p {
             color: #94a3b8;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
-        /* 下载区域 */
+        /* 下载卡片 */
         .download-section {
             margin: 3rem 0;
         }
@@ -150,16 +141,19 @@
             border-radius: 1.5rem;
             padding: 1.5rem;
             flex: 1;
-            min-width: 200px;
+            min-width: 180px;
             text-align: center;
             border: 1px solid #334155;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.2s ease;
         }
         .download-card:hover {
             background: #2d3a5e;
             border-color: #3b82f6;
-            transform: scale(1.02);
+            transform: translateY(-3px);
+        }
+        .download-card:active {
+            transform: scale(0.97);
         }
         .download-card i {
             font-size: 2.5rem;
@@ -167,12 +161,13 @@
             color: #60a5fa;
         }
         .download-card h3 {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin-bottom: 0.3rem;
         }
         .download-card p {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #94a3b8;
+            font-family: monospace;
         }
 
         /* 使用说明 */
@@ -207,8 +202,15 @@
             font-size: 0.9rem;
             flex-shrink: 0;
         }
+        code {
+            background: #1e293b;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.4rem;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
 
-        /* 开源链接区 */
+        /* 开源链接 */
         .repo-links {
             display: flex;
             justify-content: center;
@@ -232,6 +234,7 @@
         .repo-btn:hover {
             border-color: #3b82f6;
             background: #2d3a5e;
+            transform: translateY(-2px);
         }
 
         /* 页脚 */
@@ -254,6 +257,17 @@
             display: inline-flex;
             align-items: center;
             gap: 0.4rem;
+        }
+
+        /* 下载动画 Canvas */
+        #downloadCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10000;
         }
 
         @media (max-width: 768px) {
@@ -284,7 +298,7 @@
         </div>
     </div>
 
-    <!-- 头部简介 -->
+    <!-- 头部 -->
     <div class="hero">
         <div class="badge">v1.0.3 · 基于 HMCL 开发</div>
         <h2>Laoxu Minecraft Launcher</h2>
@@ -315,25 +329,40 @@
         </div>
     </div>
 
-    <!-- 下载区域 -->
+    <!-- 下载区域（四个平台） -->
     <div class="download-section" id="download">
         <h3>📦 下载</h3>
-        <p style="color:#94a3b8; margin-bottom: 0.5rem;">选择适合您的版本（Windows 10/11 推荐使用 .exe）</p>
+        <p style="color:#94a3b8; margin-bottom: 0.5rem;">选择您的平台，点击卡片开始下载</p>
         <div class="download-cards" id="downloadContainer">
-            <div class="download-card" data-url="/downloads/LaoxuLauncher.exe" data-os="win">
+            <div class="download-card" data-url="/downloads/LaoxuLauncher.exe">
                 <i class="fab fa-windows"></i>
                 <h3>Windows 版</h3>
                 <p>LaoxuLauncher.exe</p>
-                <p style="font-size:0.7rem; margin-top:5px;">推荐 · 直接运行</p>
+                <p style="font-size:0.7rem; margin-top:5px;">Windows 10/11 推荐</p>
             </div>
-            <div class="download-card" data-url="/downloads/LaoxuLauncher.jar" data-os="jar">
+            <div class="download-card" data-url="/downloads/LaoxuLauncher.jar">
                 <i class="fab fa-java"></i>
-                <h3>Java 版（跨平台）</h3>
+                <h3>macOS / 跨平台</h3>
                 <p>LaoxuLauncher.jar</p>
                 <p style="font-size:0.7rem;">需要 Java 17+</p>
             </div>
+            <div class="download-card" data-url="/downloads/LaoxuLauncher.sh">
+                <i class="fab fa-linux"></i>
+                <h3>Linux 版</h3>
+                <p>LaoxuLauncher.sh</p>
+                <p style="font-size:0.7rem;">chmod +x 后运行</p>
+            </div>
+            <div class="download-card" data-url="/downloads/LaoxuLauncher_Portable.zip">
+                <i class="fas fa-archive"></i>
+                <h3>便携版</h3>
+                <p>LaoxuLauncher.zip</p>
+                <p style="font-size:0.7rem;">免安装 · 全平台通用</p>
+            </div>
         </div>
-        <p style="font-size:0.75rem; color:#64748b; margin-top: 1rem;">注意：基岩版仅支持 Windows 10/11，且需要已安装 Minecraft for Windows（Microsoft Store 或 Xbox 应用）。</p>
+        <p style="font-size:0.75rem; color:#64748b; margin-top: 1rem;">
+            ⚠️ 基岩版仅支持 Windows 10/11，且需要已安装 Minecraft for Windows。<br>
+            🐧 Linux 用户：<code>chmod +x LaoxuLauncher.sh && ./LaoxuLauncher.sh</code> | 🍎 macOS 用户：<code>java -jar LaoxuLauncher.jar</code>
+        </p>
     </div>
 
     <!-- 使用说明 -->
@@ -341,21 +370,13 @@
         <h3>🚀 使用说明</h3>
         <div class="usage-steps">
             <div class="steps-list">
-                <div class="step">
-                    <span class="step-number">1</span>
-                    <span>下载对应版本的 <strong>LaoxuLauncher.exe</strong> 或 <strong>.jar</strong> 文件</span>
-                </div>
-                <div class="step">
-                    <span class="step-number">2</span>
-                    <span>运行启动器，点击顶部按钮切换 <strong>Java版 / 基岩版</strong></span>
-                </div>
-                <div class="step">
-                    <span class="step-number">3</span>
-                    <span>点击「启动」按钮开始游戏</span>
-                </div>
+                <div class="step"><span class="step-number">1</span><span>下载对应版本（.exe / .jar / .sh / .zip）</span></div>
+                <div class="step"><span class="step-number">2</span><span>运行启动器，点击顶部按钮切换 <strong>Java版 / 基岩版</strong></span></div>
+                <div class="step"><span class="step-number">3</span><span>点击「启动」按钮开始游戏</span></div>
             </div>
             <div style="margin-top: 1rem; font-size:0.85rem; color:#94a3b8;">
-                💡 基岩版要求：已安装 Minecraft for Windows（Microsoft Store 或 Xbox 应用），启动器会自动扫描所有磁盘分区的 XboxGames 文件夹。
+                💡 基岩版要求：已安装 Minecraft for Windows，启动器会自动扫描所有磁盘分区的 XboxGames 文件夹。<br>
+                💡 Linux 需要 Java 17+：<code>sudo apt install openjdk-17-jre</code> (Debian/Ubuntu)
             </div>
         </div>
     </div>
@@ -364,24 +385,18 @@
     <div id="opensource" style="margin: 2rem 0;">
         <h3>📄 开源 & 致谢</h3>
         <div class="repo-links">
-            <a href="https://github.com/xujinhong114514/LaoxuLauncher" target="_blank" rel="noopener noreferrer" class="repo-btn">
-                <i class="fab fa-github"></i> GitHub
-            </a>
-            <a href="https://gitee.com/minecraft-old-xu/LaoxuLauncher" target="_blank" rel="noopener noreferrer" class="repo-btn">
-                <i class="fab fa-git-alt"></i> Gitee
-            </a>
-            <a href="https://gitcode.com/2401_82989736/LaoxuLauncher" target="_blank" rel="noopener noreferrer" class="repo-btn">
-                <i class="fas fa-code-branch"></i> GitCode
-            </a>
+            <a href="https://github.com/xujinhong114514/LaoxuLauncher" target="_blank" class="repo-btn"><i class="fab fa-github"></i> GitHub</a>
+            <a href="https://gitee.com/minecraft-old-xu/LaoxuLauncher" target="_blank" class="repo-btn"><i class="fab fa-git-alt"></i> Gitee</a>
+            <a href="https://gitcode.com/2401_82989736/LaoxuLauncher" target="_blank" class="repo-btn"><i class="fas fa-code-branch"></i> GitCode</a>
         </div>
-        <div class="card" style="background:#0f172a; margin-top: 1rem;">
+        <div style="background:#0f172a; border-radius:1.2rem; padding:1.2rem; border:1px solid #334155;">
             <p style="margin-bottom: 0.5rem;"><i class="fas fa-heart" style="color:#f472b6;"></i> 致谢</p>
-            <p style="font-size:0.9rem; color:#94a3b8;">基于 <strong>HMCL</strong> 开发，感谢 @huanghongxun 及所有贡献者！本项目采用 <strong>GPL v3</strong> 许可证。</p>
-            <p style="font-size:0.85rem; margin-top: 0.8rem;">📌 代码下载：因换电脑 git 异常，最新代码请前往 <strong>master 分支</strong> 获取，main 分支为旧版存档。</p>
+            <p style="font-size:0.85rem; color:#94a3b8;">基于 <strong>HMCL</strong> 开发，感谢 @huanghongxun 及所有贡献者！本项目采用 <strong>GPL v3</strong> 许可证。</p>
+            <p style="font-size:0.8rem; margin-top: 0.8rem;">📌 代码下载：因换电脑 git 异常，最新代码请前往 <strong>master 分支</strong> 获取。</p>
         </div>
     </div>
 
-    <!-- 页脚：版权、Cloudflare + GitHub 标识 -->
+    <!-- 页脚 -->
     <div class="footer">
         <p>© 2026 Laoxu (xujinhong114514). 基于 GPL v3 开源。</p>
         <div class="security-badges">
@@ -391,29 +406,161 @@
     </div>
 </div>
 
-<!-- 下载动画与交互脚本（保持简洁） -->
+<!-- 下载动画 Canvas -->
+<canvas id="downloadCanvas"></canvas>
+
 <script>
-    // 下载功能 + 简单反馈
+    // ==================== 下载动画系统 ====================
+    const canvas = document.getElementById('downloadCanvas');
+    let ctx = canvas.getContext('2d');
+    let particles = [];
+    let animationId = null;
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+        constructor(x, y, vx, vy, size, color, alpha) {
+            this.x = x; this.y = y;
+            this.vx = vx; this.vy = vy;
+            this.size = size;
+            this.color = color;
+            this.alpha = alpha;
+            this.life = 1.0;
+            this.decay = 0.02 + Math.random() * 0.02;
+        }
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            this.vy += 0.1; // 重力
+            this.life -= this.decay;
+            return this.life > 0;
+        }
+        draw(ctx) {
+            ctx.save();
+            ctx.globalAlpha = this.life * this.alpha;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+            ctx.restore();
+        }
+    }
+
+    function triggerDownloadAnimation(clickX, clickY) {
+        // 清除旧动画
+        if (animationId) cancelAnimationFrame(animationId);
+        particles = [];
+        
+        const colors = ['#ffffff', '#60a5fa', '#3b82f6', '#a78bfa', '#f472b6', '#34d399'];
+        const particleCount = 100;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = 2 + Math.random() * 8;
+            const vx = Math.cos(angle) * speed * (Math.random() * 1.5);
+            const vy = Math.sin(angle) * speed * (Math.random() * 1.2) - 2;
+            const size = 4 + Math.random() * 10;
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            const alpha = 0.6 + Math.random() * 0.4;
+            particles.push(new Particle(clickX, clickY, vx, vy, size, color, alpha));
+        }
+        
+        // 额外白色光晕粒子
+        for (let i = 0; i < 40; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = 1 + Math.random() * 5;
+            particles.push(new Particle(clickX, clickY, Math.cos(angle) * speed, Math.sin(angle) * speed - 1, 5, '#ffffff', 0.9));
+        }
+        
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let anyAlive = false;
+            for (let i = 0; i < particles.length; i++) {
+                const alive = particles[i].update();
+                if (alive) {
+                    anyAlive = true;
+                    particles[i].draw(ctx);
+                } else {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+            if (anyAlive) {
+                animationId = requestAnimationFrame(animate);
+            } else {
+                cancelAnimationFrame(animationId);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                animationId = null;
+            }
+        }
+        animate();
+        
+        // 添加波纹特效
+        const ripple = document.createElement('div');
+        ripple.style.position = 'fixed';
+        ripple.style.left = (clickX - 40) + 'px';
+        ripple.style.top = (clickY - 40) + 'px';
+        ripple.style.width = '80px';
+        ripple.style.height = '80px';
+        ripple.style.borderRadius = '50%';
+        ripple.style.background = 'radial-gradient(circle, rgba(59,130,246,0.6) 0%, rgba(59,130,246,0) 70%)';
+        ripple.style.pointerEvents = 'none';
+        ripple.style.zIndex = '9999';
+        ripple.style.transform = 'scale(0)';
+        ripple.style.transition = 'transform 0.4s ease-out, opacity 0.5s ease-out';
+        ripple.style.opacity = '1';
+        document.body.appendChild(ripple);
+        requestAnimationFrame(() => {
+            ripple.style.transform = 'scale(5)';
+            ripple.style.opacity = '0';
+        });
+        setTimeout(() => ripple.remove(), 500);
+    }
+
+    // ==================== 下载功能 ====================
+    function performDownload(url, event) {
+        if (!url) {
+            alert('下载链接未配置，请将文件放入服务器 downloads 目录');
+            return;
+        }
+        
+        const clickX = event.clientX || window.innerWidth / 2;
+        const clickY = event.clientY || window.innerHeight / 2;
+        triggerDownloadAnimation(clickX, clickY);
+        
+        // 触发下载
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = '';
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // 卡片点击反馈
+        const card = event.target.closest('.download-card');
+        if (card) {
+            card.style.transform = 'scale(0.95)';
+            setTimeout(() => { if(card) card.style.transform = ''; }, 150);
+        }
+    }
+
+    // 绑定下载卡片事件
     const downloadCards = document.querySelectorAll('.download-card');
     downloadCards.forEach(card => {
         card.addEventListener('click', (e) => {
+            e.stopPropagation();
             const url = card.getAttribute('data-url');
-            if (url) {
-                // 简单的下载触发
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = '';
-                link.click();
-                // 视觉反馈
-                card.style.transform = 'scale(0.98)';
-                setTimeout(() => { card.style.transform = ''; }, 150);
-            } else {
-                alert("下载链接未配置，请将文件放入服务器 downloads 目录");
-            }
+            performDownload(url, e);
         });
     });
-    
-    // 平滑滚动
+
+    // 平滑滚动锚点
     document.querySelectorAll('.nav-links a').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
@@ -424,6 +571,8 @@
             }
         });
     });
+
+    console.log('✅ Laoxu Launcher 官网已加载 | 支持 Windows / macOS / Linux / 便携版 | 含下载动画');
 </script>
 </body>
 </html>
