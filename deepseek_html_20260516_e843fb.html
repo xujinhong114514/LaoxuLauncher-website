@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laoxu Minecraft Launcher</title>
+    <!-- 使用简洁字体，去掉过于花哨的样式 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0c12;
+            color: #eef2ff;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* 导航栏 - 简洁玻璃效果 */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border-radius: 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 3rem;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .logo i {
+            font-size: 1.8rem;
+            color: #3b82f6;
+        }
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1.8rem;
+        }
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .nav-links a:hover {
+            color: #60a5fa;
+        }
+
+        /* 头部简介区 */
+        .hero {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border-radius: 2rem;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            border: 1px solid #334155;
+        }
+        .hero h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .hero p {
+            color: #94a3b8;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        .badge {
+            display: inline-block;
+            background: #3b82f6;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        /* 卡片通用样式 */
+        .card {
+            background: #1e293b;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid #334155;
+            transition: 0.2s;
+        }
+        .card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+
+        /* 功能网格 */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .feature-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+        .feature-item i {
+            font-size: 1.5rem;
+            color: #3b82f6;
+            margin-top: 0.2rem;
+        }
+        .feature-item h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+        .feature-item p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        /* 下载区域 */
+        .download-section {
+            margin: 3rem 0;
+        }
+        .download-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .download-card {
+            background: #1e293b;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            border: 1px solid #334155;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .download-card:hover {
+            background: #2d3a5e;
+            border-color: #3b82f6;
+            transform: scale(1.02);
+        }
+        .download-card i {
+            font-size: 2.5rem;
+            margin-bottom: 0.8rem;
+            color: #60a5fa;
+        }
+        .download-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+        .download-card p {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        /* 使用说明 */
+        .usage-steps {
+            background: #0f172a;
+            border-radius: 1.5rem;
+            padding: 1.8rem;
+            margin: 2rem 0;
+            border: 1px solid #334155;
+        }
+        .steps-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .step {
+            flex: 1;
+            display: flex;
+            gap: 0.8rem;
+            align-items: flex-start;
+        }
+        .step-number {
+            background: #3b82f6;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        /* 开源链接区 */
+        .repo-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+        .repo-btn {
+            background: #1e293b;
+            padding: 0.7rem 1.5rem;
+            border-radius: 2rem;
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            border: 1px solid #334155;
+            transition: 0.2s;
+        }
+        .repo-btn:hover {
+            border-color: #3b82f6;
+            background: #2d3a5e;
+        }
+
+        /* 页脚 */
+        .footer {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #334155;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+        .security-badges {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        .security-badges span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                text-align: center;
+            }
+            .hero h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- 导航栏 -->
+    <div class="navbar">
+        <div class="logo">
+            <i class="fas fa-cube"></i>
+            <h1>Laoxu Launcher</h1>
+        </div>
+        <div class="nav-links">
+            <a href="#features">功能</a>
+            <a href="#download">下载</a>
+            <a href="#usage">使用说明</a>
+            <a href="#opensource">开源</a>
+        </div>
+    </div>
+
+    <!-- 头部简介 -->
+    <div class="hero">
+        <div class="badge">v1.0.3 · 基于 HMCL 开发</div>
+        <h2>Laoxu Minecraft Launcher</h2>
+        <p>一个基于 HMCL 开发的 Minecraft 启动器，<strong>新增基岩版（Windows 10/11）启动支持</strong>。</p>
+        <p>✅ Java 版完整保留 HMCL 所有功能 &nbsp;|&nbsp; ✅ 基岩版自动检测 &nbsp;|&nbsp; ✅ 双版本图形化切换</p>
+    </div>
+
+    <!-- 功能特性 -->
+    <div id="features">
+        <h3 style="margin-bottom: 1rem;">✨ 主要特性</h3>
+        <div class="features-grid">
+            <div class="feature-item">
+                <i class="fas fa-code-branch"></i>
+                <div><h3>Java + 基岩版双支持</h3><p>顶部按钮一键切换，Java 版完整功能，基岩版自动扫描 XboxGames 路径。</p></div>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-trophy"></i>
+                <div><h3>成就系统</h3><p>v1.0.3 新增成就功能，记录你的游戏历程。</p></div>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-gamepad"></i>
+                <div><h3>基岩版自动检测</h3><p>自动扫描 C:/D:/E: 等磁盘的 XboxGames 文件夹，无需手动配置。</p></div>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-palette"></i>
+                <div><h3>双版本图形化卡片</h3><p>全新卡片式界面，Java/基岩版切换更直观。</p></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 下载区域 -->
+    <div class="download-section" id="download">
+        <h3>📦 下载</h3>
+        <p style="color:#94a3b8; margin-bottom: 0.5rem;">选择适合您的版本（Windows 10/11 推荐使用 .exe）</p>
+        <div class="download-cards" id="downloadContainer">
+            <div class="download-card" data-url="/downloads/LaoxuLauncher.exe" data-os="win">
+                <i class="fab fa-windows"></i>
+                <h3>Windows 版</h3>
+                <p>LaoxuLauncher.exe</p>
+                <p style="font-size:0.7rem; margin-top:5px;">推荐 · 直接运行</p>
+            </div>
+            <div class="download-card" data-url="/downloads/LaoxuLauncher.jar" data-os="jar">
+                <i class="fab fa-java"></i>
+                <h3>Java 版（跨平台）</h3>
+                <p>LaoxuLauncher.jar</p>
+                <p style="font-size:0.7rem;">需要 Java 17+</p>
+            </div>
+        </div>
+        <p style="font-size:0.75rem; color:#64748b; margin-top: 1rem;">注意：基岩版仅支持 Windows 10/11，且需要已安装 Minecraft for Windows（Microsoft Store 或 Xbox 应用）。</p>
+    </div>
+
+    <!-- 使用说明 -->
+    <div id="usage">
+        <h3>🚀 使用说明</h3>
+        <div class="usage-steps">
+            <div class="steps-list">
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <span>下载对应版本的 <strong>LaoxuLauncher.exe</strong> 或 <strong>.jar</strong> 文件</span>
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <span>运行启动器，点击顶部按钮切换 <strong>Java版 / 基岩版</strong></span>
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <span>点击「启动」按钮开始游戏</span>
+                </div>
+            </div>
+            <div style="margin-top: 1rem; font-size:0.85rem; color:#94a3b8;">
+                💡 基岩版要求：已安装 Minecraft for Windows（Microsoft Store 或 Xbox 应用），启动器会自动扫描所有磁盘分区的 XboxGames 文件夹。
+            </div>
+        </div>
+    </div>
+
+    <!-- 开源与致谢 -->
+    <div id="opensource" style="margin: 2rem 0;">
+        <h3>📄 开源 & 致谢</h3>
+        <div class="repo-links">
+            <a href="https://github.com/xujinhong114514/LaoxuLauncher" target="_blank" rel="noopener noreferrer" class="repo-btn">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+            <a href="https://gitee.com/minecraft-old-xu/LaoxuLauncher" target="_blank" rel="noopener noreferrer" class="repo-btn">
+                <i class="fab fa-git-alt"></i> Gitee
+            </a>
+            <a href="https://gitcode.com/2401_82989736/LaoxuLauncher" target="_blank" rel="noopener noreferrer" class="repo-btn">
+                <i class="fas fa-code-branch"></i> GitCode
+            </a>
+        </div>
+        <div class="card" style="background:#0f172a; margin-top: 1rem;">
+            <p style="margin-bottom: 0.5rem;"><i class="fas fa-heart" style="color:#f472b6;"></i> 致谢</p>
+            <p style="font-size:0.9rem; color:#94a3b8;">基于 <strong>HMCL</strong> 开发，感谢 @huanghongxun 及所有贡献者！本项目采用 <strong>GPL v3</strong> 许可证。</p>
+            <p style="font-size:0.85rem; margin-top: 0.8rem;">📌 代码下载：因换电脑 git 异常，最新代码请前往 <strong>master 分支</strong> 获取，main 分支为旧版存档。</p>
+        </div>
+    </div>
+
+    <!-- 页脚：版权、Cloudflare + GitHub 标识 -->
+    <div class="footer">
+        <p>© 2026 Laoxu (xujinhong114514). 基于 GPL v3 开源。</p>
+        <div class="security-badges">
+            <span><i class="fab fa-cloudflare" style="color:#f38020;"></i> 此域名由 Cloudflare 维护安全</span>
+            <span><i class="fab fa-github"></i> 由 GitHub Pages 托管</span>
+        </div>
+    </div>
+</div>
+
+<!-- 下载动画与交互脚本（保持简洁） -->
+<script>
+    // 下载功能 + 简单反馈
+    const downloadCards = document.querySelectorAll('.download-card');
+    downloadCards.forEach(card => {
+        card.addEventListener('click', (e) => {
+            const url = card.getAttribute('data-url');
+            if (url) {
+                // 简单的下载触发
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = '';
+                link.click();
+                // 视觉反馈
+                card.style.transform = 'scale(0.98)';
+                setTimeout(() => { card.style.transform = ''; }, 150);
+            } else {
+                alert("下载链接未配置，请将文件放入服务器 downloads 目录");
+            }
+        });
+    });
+    
+    // 平滑滚动
+    document.querySelectorAll('.nav-links a').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href && href.startsWith('#')) {
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) target.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+</script>
+</body>
+</html>
